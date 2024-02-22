@@ -1,0 +1,49 @@
+{
+    "name": "convert-text",
+    "displayName": "Convert Text [QT]",
+    "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
+    "version": "0.0.1",
+    "icon": "./logo.png",
+    "engines": {
+        "vscode": "^1.86.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "quangtrong.vscode.convert-text"
+    ],
+    "main": "./extension.js",
+    "contributes": {
+        "commands": [
+            {
+                "command": "quangtrong.vscode.convert-text",
+                "title": "Convert Text"
+            }
+        ],
+        "keybindings": [
+            {
+                "command": "quangtrong.vscode.convert-text",
+                "key": "ctrl+alt+c",
+                "mac": "shift+cmd+c"
+            }
+        ]
+    },
+    "scripts": {
+        "lint": "eslint .",
+        "pretest": "npm run lint",
+        "test": "vscode-test"
+    },
+    "repository": {
+        "url": ""
+    },
+    "devDependencies": {
+        "@types/vscode": "^1.86.0",
+        "@types/mocha": "^10.0.6",
+        "@types/node": "18.x",
+        "eslint": "^8.56.0",
+        "typescript": "^5.3.3",
+        "@vscode/test-cli": "^0.0.6",
+        "@vscode/test-electron": "^2.3.9"
+    }
+}
