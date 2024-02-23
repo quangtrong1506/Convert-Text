@@ -1,8 +1,9 @@
 {
     "name": "convert-text",
     "displayName": "Convert Text [QT]",
+    "publisher": "QuangTrong1506",
     "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "icon": "./logo.png",
     "engines": {
         "vscode": "^1.86.0"
@@ -35,15 +36,18 @@
         "test": "vscode-test"
     },
     "repository": {
-        "url": ""
+        "url": "https://github.com/quangtrong1506/Conver-Text"
     },
     "devDependencies": {
-        "@types/vscode": "^1.86.0",
         "@types/mocha": "^10.0.6",
         "@types/node": "18.x",
-        "eslint": "^8.56.0",
-        "typescript": "^5.3.3",
+        "@types/vscode": "^1.86.0",
         "@vscode/test-cli": "^0.0.6",
-        "@vscode/test-electron": "^2.3.9"
+        "@vscode/test-electron": "^2.3.9",
+        "eslint": "^8.56.0",
+        "typescript": "^5.3.3"
+    },
+    "dependencies": {
+        "node-fetch": "^2.7.0"
     }
 }
