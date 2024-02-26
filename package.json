@@ -1,32 +1,64 @@
 {
-    "name": "convert-text",
-    "displayName": "Convert Text [QT]",
+    "name": "text.convert",
+    "displayName": "Convert text to variable, text translate, text formatter...",
     "publisher": "QuangTrong1506",
     "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
-    "version": "0.0.2",
+    "version": "1.0.1",
     "icon": "./logo.png",
     "engines": {
         "vscode": "^1.86.0"
     },
     "categories": [
+        "Programming Languages",
+        "Formatters",
         "Other"
     ],
     "activationEvents": [
-        "quangtrong.vscode.convert-text"
+        "quangtrong.vscode.text.convert",
+        "quangtrong.vscode.text.translate",
+        "quangtrong.vscode.text.feature",
+        "quangtrong.vscode.text.format"
     ],
-    "main": "./extension.js",
+    "main": "./src/extension.js",
     "contributes": {
         "commands": [
             {
-                "command": "quangtrong.vscode.convert-text",
-                "title": "Convert Text"
+                "command": "quangtrong.vscode.text.feature",
+                "title": "Select feature"
+            },
+            {
+                "command": "quangtrong.vscode.text.convert",
+                "title": "Convert text to variable"
+            },
+            {
+                "command": "quangtrong.vscode.text.translate",
+                "title": "Translate"
+            },
+            {
+                "command": "quangtrong.vscode.text.format",
+                "title": "Text format"
             }
         ],
         "keybindings": [
             {
-                "command": "quangtrong.vscode.convert-text",
+                "command": "quangtrong.vscode.text.convert",
                 "key": "ctrl+alt+c",
                 "mac": "shift+cmd+c"
+            },
+            {
+                "command": "quangtrong.vscode.text.feature",
+                "key": "ctrl+alt+s",
+                "mac": "shift+cmd+s"
+            },
+            {
+                "command": "quangtrong.vscode.text.translate",
+                "key": "ctrl+alt+t",
+                "mac": "shift+cmd+t"
+            },
+            {
+                "command": "quangtrong.vscode.text.format",
+                "key": "ctrl+alt+f",
+                "mac": "shift+cmd+f"
             }
         ]
     },
@@ -36,7 +68,7 @@
         "test": "vscode-test"
     },
     "repository": {
-        "url": "https://github.com/quangtrong1506/Conver-Text"
+        "url": "https://github.com/quangtrong1506/text.convert"
     },
     "devDependencies": {
         "@types/mocha": "^10.0.6",

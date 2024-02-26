@@ -1,4 +1,58 @@
-const fetch = require('node-fetch');
+const API_URL = 'https://api-apc.cognitive.microsofttranslator.com/translate/';
+const API_KEY = '63a9e9fdfaae40ca9fb5f816c4f3d540';
+const API_VERSION = '3.0';
+const API_REGION = 'southeastasia';
+
+const SELECT_FEATURE_ITEM = [
+    {
+        label: 'Convert',
+        detail: 'Convert text to variable',
+        description: '',
+        picked: true,
+    },
+    {
+        label: 'Translate',
+        description: '',
+        detail: 'Translate text into another language',
+    },
+    {
+        label: 'Formatters',
+        detail: 'Remove special characters, remove extra spaces...',
+        description: '',
+    },
+];
+const SELECT_FORMAT_TYPES = [
+    {
+        label: 'Uppercase',
+        // detail: 'Convert text to UPPERCASE',
+        description: '',
+        picked: true,
+    },
+    {
+        label: 'Lowercase',
+        // detail: 'Convert text to lowercase',
+        description: '',
+        picked: true,
+    },
+    {
+        label: 'Capitalize',
+        // detail: 'Convert text to ',
+        description: '',
+        picked: true,
+    },
+    {
+        label: 'Remove vietnamese characters',
+        // detail: '',
+        description: '',
+        picked: true,
+    },
+    {
+        label: 'Beautify text',
+        // detail: '',
+        description: '',
+        picked: true,
+    },
+];
 const LIST_LANGUAGE = [
     { label: 'Afrikaans', code: 'af' },
     { label: 'Albanian', code: 'sq' },
@@ -134,6 +188,7 @@ const LIST_LANGUAGE = [
     { label: 'Yucatec Maya', code: 'yua' },
     { label: 'Zulu', code: 'zu' },
 ];
+
 const QUICK_PICK_ITEM = [
     {
         label: 'camelCase                                                       ',
@@ -157,89 +212,26 @@ const QUICK_PICK_ITEM = [
         description: 'EG: Visual Studio Code   ⇒   Visual-Studio-Code',
     },
     {
-        label: 'UPPERCASE                                                     ',
-        description: 'EG: Visual Studio Code   ⇒   VISUAL STUDIO CODE',
+        label: 'To Text                                                              ',
+        description: 'EG: Visual-Studio-Code   ⇒   Visual Studio Code',
     },
-    {
-        label: 'lowercase                                                        ',
-        description: 'EG: Visual Studio Code   ⇒   visual studio code',
-    },
-    {
-        label: 'Delete special characters                                ',
-        description: 'EG: Visual-Studio-Code   ⇒   VisualStudioCode',
-    },
-    {
-        label: 'Beautify text                                                    ',
-        description: 'EG: Visual   Studio Code ⇒  Visual Studio Code',
-    },
-    {
-        label: 'Remove Vietnamese characters                      ',
-        description: 'EG: Việt Nam ⇒ Viet Nam',
-    },
-    {
-        label: 'Translate: Vietnamese ⇒ English',
-        description: '',
-    },
-    {
-        label: 'Translate: English ⇒ Vietnamese',
-        description: '',
-    },
-    {
-        label: 'Translate: Many Languages',
-        description: '',
-    },
+    // {
+    //     label: 'UPPERCASE                                                     ',
+    //     description: 'EG: Visual Studio Code   ⇒   VISUAL STUDIO CODE',
+    // },
+    // {
+    //     label: 'lowercase                                                        ',
+    //     description: 'EG: Visual Studio Code   ⇒   visual studio code',
+    // },
 ];
-const removeVietnameseCharacters = (str) => {
-    // remove accents
-    var from =
-            'àáãảạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệđùúủũụưừứửữựòóỏõọôồốổỗộơờớởỡợìíỉĩịäëïîöüûñçýỳỹỵỷÀÁÃẢẠĂẰẮẲẴẶÂẦẤẨẪẬÈÉẺẼẸÊỀẾỂỄỆĐÙÚỦŨỤƯỪỨỬỮỰÒÓỎÕỌÔỒỐỔỖỘƠỜỚỞỠỢÌÍỈĨỊÄËÏÎÖÜÛÑÇÝỲỸỴỶ',
-        to =
-            'aaaaaaaaaaaaaaaaaeeeeeeeeeeeduuuuuuuuuuuoooooooooooooooooiiiiiaeiiouuncyyyyyAAAAAAAAAAAAAAAAAEEEEEEEEEEEDUUUUUUUUUUUOOOOOOOOOOOOOOOOOIIIIIAEIIOUUNCYYYYY';
-    for (var i = 0, l = from.length; i < l; i++) {
-        str = str.replace(RegExp(from[i], 'gi'), to[i]);
-    }
-    str = str
-        .trim()
-        .replace(/[^A-Za-z0-9\s]/g, '-')
-        .replace(/-+/g, '-');
-    return str;
-};
-const cleanText = (text) => {
-    text = text.replace(/[^A-Za-z0-9]/g, ' ').trim();
-    while (text.match(/  /)) {
-        text = text.replaceAll('  ', ' ');
-    }
 
-    return text;
-};
-const translateAPI = async (
-    options = {
-        Text: 'Hello World',
-        from: 'en',
-        to: 'vi',
-    }
-) => {
-    const myHeaders = {
-        'Ocp-Apim-Subscription-Key': '63a9e9fdfaae40ca9fb5f816c4f3d540',
-        'Ocp-Apim-Subscription-Region': 'southeastasia',
-        'Content-type': 'application/json',
-    };
-    const response = await fetch(
-        'https://api-apc.cognitive.microsofttranslator.com/translate/' +
-            `?api-version=3.0&from=${options.from}&to=${options.to}`,
-        {
-            headers: myHeaders,
-            body: JSON.stringify([{ Text: options.Text }]),
-            method: 'POST',
-        }
-    );
-    const body = await response.json();
-    return body;
-};
 module.exports = {
+    API_KEY,
+    API_URL,
+    API_REGION,
+    API_VERSION,
+    SELECT_FEATURE_ITEM,
     LIST_LANGUAGE,
     QUICK_PICK_ITEM,
-    cleanText,
-    removeVietnameseCharacters,
-    translateAPI,
+    SELECT_FORMAT_TYPES,
 };
