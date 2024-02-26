@@ -1,5 +1,5 @@
 {
-    "name": "text.convert",
+    "name": "text-convert",
     "displayName": "Convert text to variable, text translate, text formatter...",
     "publisher": "QuangTrong1506",
     "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
