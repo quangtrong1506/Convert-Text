@@ -105,7 +105,7 @@ const openConversionOptions = () => {
                 text = text
                     .toLowerCase()
                     .replace(/\w/, (x) => x[0].toUpperCase())
-                    .replace(/[^a-zA-Z0-9]/, ' ')
+                    .replace(/[^a-zA-Z0-9]/g, ' ')
                     .trim();
                 text = variableToString(text);
                 break;
