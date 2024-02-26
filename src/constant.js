@@ -212,8 +212,12 @@ const QUICK_PICK_ITEM = [
         description: 'EG: Visual Studio Code   ⇒   Visual-Studio-Code',
     },
     {
-        label: 'To Text                                                              ',
+        label: 'To Text                                                             ',
         description: 'EG: Visual-Studio-Code   ⇒   Visual Studio Code',
+    },
+    {
+        label: 'Remove Vietnamese characters                      ',
+        description: 'EG: Việt Nam   ⇒   Viet Nam',
     },
     // {
     //     label: 'UPPERCASE                                                     ',

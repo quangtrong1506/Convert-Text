@@ -109,6 +109,9 @@ const openConversionOptions = () => {
                     .trim();
                 text = variableToString(text);
                 break;
+            case QUICK_PICK_ITEM[6].label:
+                text = removeVietnameseCharacters(text).trim();
+                break;
             //? Uppercase
             // case QUICK_PICK_ITEM[5].label:
             //     text = text.toUpperCase();
