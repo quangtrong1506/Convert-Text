@@ -3,7 +3,7 @@
     "displayName": "Convert text to variable, text translate, text formatter...",
     "publisher": "QuangTrong1506",
     "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "icon": "./logo.png",
     "engines": {
         "vscode": "^1.86.0"
