@@ -53,7 +53,9 @@ const translateAPI = async (
     return body;
 };
 const variableToString = (text) => {
-    text = text.replace(/[A-Z]/g, (x) => ' ' + x[0].toUpperCase());
+    text = text.replace(/[A-Z]/g, (x) => {
+        return ' ' + x.toUpperCase();
+    });
     return text;
 };
 module.exports = {

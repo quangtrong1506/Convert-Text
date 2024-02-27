@@ -102,12 +102,13 @@ const openConversionOptions = () => {
                 text = text.replaceAll(/\s/g, '-');
                 break;
             case QUICK_PICK_ITEM[5].label:
+                text = variableToString(text);
                 text = text
                     .toLowerCase()
                     .replace(/\w/, (x) => x[0].toUpperCase())
                     .replace(/[^a-zA-Z0-9]/g, ' ')
                     .trim();
-                text = variableToString(text);
+
                 break;
             case QUICK_PICK_ITEM[6].label:
                 text = removeVietnameseCharacters(text).trim();
