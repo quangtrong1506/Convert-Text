@@ -54,27 +54,10 @@ const activate = (context) => {
         "quangtrong.vscode.text.format",
         selectFormatType
     );
-    let convertToJSX = vscode.commands.registerCommand("quangtrong.vscode.convertHTMLtoJSX", () => {
-        let editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-
-        let selection = editor.selection;
-        let range = new vscode.Range(
-            selection.start.line,
-            selection.start.character,
-            selection.end.line,
-            selection.end.character
-        );
-        let text = editor.document.getText(selection);
-        const jsxConverter = new JSXConvertor();
-        let newString = jsxConverter.convert(text);
-
-        editor.edit(function (editBuilder) {
-            editBuilder.replace(range, newString);
-        });
-    });
+    let convertToJSX = vscode.commands.registerCommand(
+        "quangtrong.vscode.convertHTMLtoJSX",
+        htmlToJSX
+    );
     context.subscriptions.push(selectFeature);
     context.subscriptions.push(selectConversionOptions);
     context.subscriptions.push(selectLanguage);
@@ -149,6 +132,9 @@ const openConversionOptions = () => {
             // case QUICK_PICK_ITEM[9].label:
             //     text = removeVietnameseCharacters(text);
             //     break;
+            case QUICK_PICK_ITEM[7].label:
+                htmlToJSX();
+                break;
             default:
                 console.log(select);
                 break;
@@ -201,6 +187,7 @@ const selectCurrentLanguage = async (text) => {
         });
     });
 };
+
 const selectFormatType = () => {
     const select = vscode.window.createQuickPick();
     select.items = SELECT_FORMAT_TYPES;
@@ -288,7 +275,27 @@ const translate = async (text = "Hello", from, to) => {
         return null;
     }
 };
+const htmlToJSX = () => {
+    let editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        return;
+    }
 
+    let selection = editor.selection;
+    let range = new vscode.Range(
+        selection.start.line,
+        selection.start.character,
+        selection.end.line,
+        selection.end.character
+    );
+    let text = editor.document.getText(selection);
+    const jsxConverter = new JSXConvertor();
+    let newString = jsxConverter.convert(text);
+
+    editor.edit(function (editBuilder) {
+        editBuilder.replace(range, newString);
+    });
+};
 const deactivate = () => {};
 
 module.exports = {

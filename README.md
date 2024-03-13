@@ -22,6 +22,11 @@
 -   Win: ctrl+alt+C,
 -   mac: shift+cmd+C
 
+##### HTML To JSX
+
+-   Win: ctrl+alt+X,
+-   mac: shift+cmd+X
+
 #### Examples
 
 ...
