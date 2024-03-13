@@ -1,11 +1,12 @@
-const vscode = require('vscode');
+const JSXConvertor = require("./JSXConvertor.js");
 
+const vscode = require("vscode");
 const {
     QUICK_PICK_ITEM,
     SELECT_FEATURE_ITEM,
     LIST_LANGUAGE,
     SELECT_FORMAT_TYPES,
-} = require('./constant.js');
+} = require("./constant.js");
 
 const {
     cleanText,
@@ -13,11 +14,11 @@ const {
     translateAPI,
     cleanWhiteSpace,
     variableToString,
-} = require('./helpers.js');
+} = require("./helpers.js");
 
 const activate = (context) => {
     let selectFeature = vscode.commands.registerCommand(
-        'quangtrong.vscode.text.feature',
+        "quangtrong.vscode.text.feature",
         async function () {
             if (!getText()) return;
             const feature = vscode.window.createQuickPick();
@@ -29,8 +30,10 @@ const activate = (context) => {
                         openConversionOptions();
                         break;
                     case SELECT_FEATURE_ITEM[1].label:
+                        selectCurrentLanguage();
                         break;
                     case SELECT_FEATURE_ITEM[2].label:
+                        selectFormatType();
                         break;
                     default:
                         break;
@@ -40,21 +43,43 @@ const activate = (context) => {
         }
     );
     let selectConversionOptions = vscode.commands.registerCommand(
-        'quangtrong.vscode.text.convert',
+        "quangtrong.vscode.text.convert",
         openConversionOptions
     );
     let selectLanguage = vscode.commands.registerCommand(
-        'quangtrong.vscode.text.translate',
+        "quangtrong.vscode.text.translate",
         selectCurrentLanguage
     );
     let selectFormat = vscode.commands.registerCommand(
-        'quangtrong.vscode.text.format',
+        "quangtrong.vscode.text.format",
         selectFormatType
     );
+    let convertToJSX = vscode.commands.registerCommand("quangtrong.vscode.convertHTMLtoJSX", () => {
+        let editor = vscode.window.activeTextEditor;
+        if (!editor) {
+            return;
+        }
+
+        let selection = editor.selection;
+        let range = new vscode.Range(
+            selection.start.line,
+            selection.start.character,
+            selection.end.line,
+            selection.end.character
+        );
+        let text = editor.document.getText(selection);
+        const jsxConverter = new JSXConvertor();
+        let newString = jsxConverter.convert(text);
+
+        editor.edit(function (editBuilder) {
+            editBuilder.replace(range, newString);
+        });
+    });
     context.subscriptions.push(selectFeature);
     context.subscriptions.push(selectConversionOptions);
     context.subscriptions.push(selectLanguage);
     context.subscriptions.push(selectFormat);
+    context.subscriptions.push(convertToJSX);
 };
 const openConversionOptions = () => {
     let text = getText();
@@ -71,7 +96,7 @@ const openConversionOptions = () => {
                 text = cleanText(text);
                 text = text
                     .replace(/\s+[a-z]/g, (x) => x[1].toUpperCase())
-                    .replace(/\s/g, '')
+                    .replace(/\s/g, "")
                     .replace(/\w/, (x) => x[0].toLowerCase());
                 break;
             //? PascalCase
@@ -80,33 +105,33 @@ const openConversionOptions = () => {
                 text = cleanText(text);
                 text = text
                     .replace(/\s+[a-z]/g, (x) => x[1].toUpperCase())
-                    .replaceAll(/\s/g, '')
+                    .replaceAll(/\s/g, "")
                     .replace(/\w/, (x) => x[0].toUpperCase());
                 break;
             //? CONSTANT
             case QUICK_PICK_ITEM[2].label:
                 text = variableToString(text);
                 text = cleanText(text);
-                text = text.toUpperCase().replaceAll(/\s/g, '_');
+                text = text.toUpperCase().replaceAll(/\s/g, "_");
                 break;
             //? underscore
             case QUICK_PICK_ITEM[3].label:
                 text = variableToString(text);
                 text = cleanText(text);
-                text = text.toLowerCase().replaceAll(/\s/g, '_');
+                text = text.toLowerCase().replaceAll(/\s/g, "_");
                 break;
             //? Link
             case QUICK_PICK_ITEM[4].label:
                 text = variableToString(text);
                 text = cleanText(text);
-                text = text.replaceAll(/\s/g, '-');
+                text = text.replaceAll(/\s/g, "-");
                 break;
             case QUICK_PICK_ITEM[5].label:
                 text = variableToString(text);
                 text = text
                     .toLowerCase()
                     .replace(/\w/, (x) => x[0].toUpperCase())
-                    .replace(/[^a-zA-Z0-9]/g, ' ')
+                    .replace(/[^a-zA-Z0-9]/g, " ")
                     .trim();
 
                 break;
@@ -136,8 +161,8 @@ const openConversionOptions = () => {
 const selectCurrentLanguage = async (text) => {
     const options = {
         text: text,
-        from: '',
-        to: '',
+        from: "",
+        to: "",
     };
     const from = vscode.window.createQuickPick();
     from.items = LIST_LANGUAGE.map((language) => {
@@ -147,8 +172,8 @@ const selectCurrentLanguage = async (text) => {
         };
         return item;
     });
-    from.title = 'Current language';
-    from.placeholder = 'Current language';
+    from.title = "Current language";
+    from.placeholder = "Current language";
     from.show();
     await from.onDidChangeSelection(async (selectedItems) => {
         const label = selectedItems[0].label;
@@ -164,8 +189,8 @@ const selectCurrentLanguage = async (text) => {
             };
             return item;
         });
-        to.title = 'Translate into language';
-        to.placeholder = 'Translate into language';
+        to.title = "Translate into language";
+        to.placeholder = "Translate into language";
         to.show();
         await to.onDidChangeSelection(async (selectedItems) => {
             const label = selectedItems[0].label;
@@ -181,7 +206,7 @@ const selectFormatType = () => {
     select.items = SELECT_FORMAT_TYPES;
     select.show();
     select.onDidChangeSelection((selectedItems) => {
-        let text = '';
+        let text = "";
         switch (selectedItems[0].label) {
             case SELECT_FORMAT_TYPES[0].label:
                 text = cleanWhiteSpace(getText()).toUpperCase();
@@ -194,7 +219,7 @@ const selectFormatType = () => {
             case SELECT_FORMAT_TYPES[2].label:
                 text = cleanWhiteSpace(getText());
                 text = text
-                    .replace(/\s+[a-z]/g, (x) => ' ' + x[1].toUpperCase())
+                    .replace(/\s+[a-z]/g, (x) => " " + x[1].toUpperCase())
                     .replace(/\w/, (x) => x[0].toUpperCase());
                 setText(text);
                 break;
@@ -217,12 +242,12 @@ const selectFormatType = () => {
 const getText = () => {
     const editor = vscode.window.activeTextEditor;
     if (!editor) {
-        vscode.window.showWarningMessage('Please open a file');
+        vscode.window.showWarningMessage("Please open a file");
         return;
     }
     const selection = editor.selection;
     if (!selection || selection.isEmpty) {
-        vscode.window.showWarningMessage('Please select the text to convert!', {
+        vscode.window.showWarningMessage("Please select the text to convert!", {
             modal: true,
         });
         return;
@@ -250,16 +275,16 @@ const setText = (text) => {
     });
 };
 
-const translate = async (text = 'Hello', from, to) => {
+const translate = async (text = "Hello", from, to) => {
     try {
         console.log({ Text: text, from, to });
         const response = await translateAPI({ Text: text, from, to });
         return response[0].translations[0].text;
     } catch (error) {
-        console.log('Lỗi');
-        if (error.name === 'FetchError')
-            vscode.window.showErrorMessage('Please check your internet connection again!');
-        else vscode.window.showErrorMessage('Internal error, please try again later!');
+        console.log("Lỗi");
+        if (error.name === "FetchError")
+            vscode.window.showErrorMessage("Please check your internet connection again!");
+        else vscode.window.showErrorMessage("Internal error, please try again later!");
         return null;
     }
 };

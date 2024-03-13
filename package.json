@@ -3,7 +3,7 @@
     "displayName": "Convert text to variable, text translate, text formatter...",
     "publisher": "QuangTrong1506",
     "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
-    "version": "1.0.2",
+    "version": "1.0.7",
     "icon": "./logo.png",
     "engines": {
         "vscode": "^1.86.0"
@@ -17,7 +17,8 @@
         "quangtrong.vscode.text.convert",
         "quangtrong.vscode.text.translate",
         "quangtrong.vscode.text.feature",
-        "quangtrong.vscode.text.format"
+        "quangtrong.vscode.text.format",
+        "quangtrong.vscode.text.convertHTMLtoJSX"
     ],
     "main": "./src/extension.js",
     "contributes": {
@@ -37,6 +38,10 @@
             {
                 "command": "quangtrong.vscode.text.format",
                 "title": "Text format"
+            },
+            {
+                "command": "quangtrong.vscode.convertHTMLtoJSX",
+                "title": "Convert HTML to JSX"
             }
         ],
         "keybindings": [
@@ -59,6 +64,11 @@
                 "command": "quangtrong.vscode.text.format",
                 "key": "ctrl+alt+f",
                 "mac": "shift+cmd+f"
+            },
+            {
+                "when": "editorHasSelection",
+                "command": "quangtrong.vscode.convertHTMLtoJSX",
+                "key": "ctrl+alt+x"
             }
         ]
     },
@@ -77,9 +87,12 @@
         "@vscode/test-cli": "^0.0.6",
         "@vscode/test-electron": "^2.3.9",
         "eslint": "^8.56.0",
-        "typescript": "^5.3.3"
+        "typescript": "^5.3.3",
+        "@types/htmltojsx": "0.0.29"
     },
     "dependencies": {
-        "node-fetch": "^2.7.0"
+        "node-fetch": "^2.7.0",
+        "htmltojsx": "^0.3.0",
+        "hoek": "^5.0.3"
     }
 }
