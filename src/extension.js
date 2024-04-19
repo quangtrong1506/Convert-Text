@@ -1,63 +1,37 @@
 const JSXConvertor = require("./JSXConvertor.js");
 
 const vscode = require("vscode");
-const {
-    QUICK_PICK_ITEM,
-    SELECT_FEATURE_ITEM,
-    LIST_LANGUAGE,
-    SELECT_FORMAT_TYPES,
-} = require("./constant.js");
+const { QUICK_PICK_ITEM, SELECT_FEATURE_ITEM, LIST_LANGUAGE, SELECT_FORMAT_TYPES } = require("./constant.js");
 
-const {
-    cleanText,
-    removeVietnameseCharacters,
-    translateAPI,
-    cleanWhiteSpace,
-    variableToString,
-} = require("./helpers.js");
+const { cleanText, removeVietnameseCharacters, translateAPI, cleanWhiteSpace, variableToString, cleanText2 } = require("./helpers.js");
 
 const activate = (context) => {
-    let selectFeature = vscode.commands.registerCommand(
-        "quangtrong.vscode.text.feature",
-        async function () {
-            if (!getText()) return;
-            const feature = vscode.window.createQuickPick();
-            feature.items = SELECT_FEATURE_ITEM;
-            feature.show();
-            feature.onDidChangeSelection((select) => {
-                switch (select[0].label) {
-                    case SELECT_FEATURE_ITEM[0].label:
-                        openConversionOptions();
-                        break;
-                    case SELECT_FEATURE_ITEM[1].label:
-                        selectCurrentLanguage();
-                        break;
-                    case SELECT_FEATURE_ITEM[2].label:
-                        selectFormatType();
-                        break;
-                    default:
-                        break;
-                }
-                feature.dispose();
-            });
-        }
-    );
-    let selectConversionOptions = vscode.commands.registerCommand(
-        "quangtrong.vscode.text.convert",
-        openConversionOptions
-    );
-    let selectLanguage = vscode.commands.registerCommand(
-        "quangtrong.vscode.text.translate",
-        selectCurrentLanguage
-    );
-    let selectFormat = vscode.commands.registerCommand(
-        "quangtrong.vscode.text.format",
-        selectFormatType
-    );
-    let convertToJSX = vscode.commands.registerCommand(
-        "quangtrong.vscode.convertHTMLtoJSX",
-        htmlToJSX
-    );
+    let selectFeature = vscode.commands.registerCommand("quangtrong.vscode.text.feature", async function () {
+        if (!getText()) return;
+        const feature = vscode.window.createQuickPick();
+        feature.items = SELECT_FEATURE_ITEM;
+        feature.show();
+        feature.onDidChangeSelection((select) => {
+            switch (select[0].label) {
+                case SELECT_FEATURE_ITEM[0].label:
+                    openConversionOptions();
+                    break;
+                case SELECT_FEATURE_ITEM[1].label:
+                    selectCurrentLanguage();
+                    break;
+                case SELECT_FEATURE_ITEM[2].label:
+                    selectFormatType();
+                    break;
+                default:
+                    break;
+            }
+            feature.dispose();
+        });
+    });
+    let selectConversionOptions = vscode.commands.registerCommand("quangtrong.vscode.text.convert", openConversionOptions);
+    let selectLanguage = vscode.commands.registerCommand("quangtrong.vscode.text.translate", selectCurrentLanguage);
+    let selectFormat = vscode.commands.registerCommand("quangtrong.vscode.text.format", selectFormatType);
+    let convertToJSX = vscode.commands.registerCommand("quangtrong.vscode.convertHTMLtoJSX", htmlToJSX);
     context.subscriptions.push(selectFeature);
     context.subscriptions.push(selectConversionOptions);
     context.subscriptions.push(selectLanguage);
@@ -133,7 +107,13 @@ const openConversionOptions = () => {
             //     text = removeVietnameseCharacters(text);
             //     break;
             case QUICK_PICK_ITEM[7].label:
-                htmlToJSX();
+                text = htmlToJSX(text);
+                break;
+            case QUICK_PICK_ITEM[8].label:
+                text = convertImport(text, 0);
+                break;
+            case QUICK_PICK_ITEM[9].label:
+                text = convertImport(text, 1);
                 break;
             default:
                 console.log(select);
@@ -205,9 +185,7 @@ const selectFormatType = () => {
                 break;
             case SELECT_FORMAT_TYPES[2].label:
                 text = cleanWhiteSpace(getText());
-                text = text
-                    .replace(/\s+[a-z]/g, (x) => " " + x[1].toUpperCase())
-                    .replace(/\w/, (x) => x[0].toUpperCase());
+                text = text.replace(/\s+[a-z]/g, (x) => " " + x[1].toUpperCase()).replace(/\w/, (x) => x[0].toUpperCase());
                 setText(text);
                 break;
             case SELECT_FORMAT_TYPES[3].label:
@@ -261,43 +239,50 @@ const setText = (text) => {
         editBuilder.replace(selectionRange, text);
     });
 };
-
 const translate = async (text = "Hello", from, to) => {
     try {
         console.log({ Text: text, from, to });
         const response = await translateAPI({ Text: text, from, to });
-        return response[0].translations[0].text;
+        return response;
     } catch (error) {
         console.log("Lỗi");
-        if (error.name === "FetchError")
-            vscode.window.showErrorMessage("Please check your internet connection again!");
+        if (error.name === "FetchError") vscode.window.showErrorMessage("Please check your internet connection again!");
         else vscode.window.showErrorMessage("Internal error, please try again later!");
+        console.log(error);
         return null;
     }
 };
-const htmlToJSX = () => {
-    let editor = vscode.window.activeTextEditor;
-    if (!editor) {
-        return;
-    }
-
-    let selection = editor.selection;
-    let range = new vscode.Range(
-        selection.start.line,
-        selection.start.character,
-        selection.end.line,
-        selection.end.character
-    );
-    let text = editor.document.getText(selection);
+const htmlToJSX = (text) => {
     const jsxConverter = new JSXConvertor();
     let newString = jsxConverter.convert(text);
-
-    editor.edit(function (editBuilder) {
-        editBuilder.replace(range, newString);
-    });
+    return newString;
 };
 const deactivate = () => {};
 
+const convertImport = (string, type) => {
+    //Require to Import
+    let result = "";
+    if (type == 0) {
+        let stringClone = cleanText2(string).replace(";", "").replaceAll('"', "'");
+        let arrS = stringClone.split(" ");
+        if (arrS[3] && arrS[3].match(/\./)) result = `import {${arrS[3].split(".")[1]}} from '${arrS[3].split("'")[1]}';`;
+        else if (arrS[0] && arrS[1] && arrS[2] && arrS[3]) {
+            result = `import ${arrS[1]} from '${arrS[3].split("'")[1]}';`;
+        } else if (arrS.length == 1) {
+            result = `import '${arrS[0].split("'")[1]}';`;
+        }
+    } else if (type == 1) {
+        let stringClone = cleanText2(string).replace(";", "").replaceAll('"', "'");
+        let arrS = stringClone.split(" ");
+        if (arrS[3] && arrS[3].match(/\./)) result = `const {${arrS[3].split(".")[1]}} = require('${arrS[3].split("'")[1]}');`;
+        else if (arrS[0] && arrS[1] && arrS[2] && arrS[3]) {
+            result = `const ${arrS[1]} = require('${arrS[3].split("'")[1]}');`;
+        } else if (arrS.length == 2) {
+            result = `require(${arrS[1]});`;
+        }
+    }
+    return result;
+};
 module.exports = {
     activate,
     deactivate,

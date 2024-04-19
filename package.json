@@ -81,18 +81,21 @@
         "url": "https://github.com/quangtrong1506/text.convert"
     },
     "devDependencies": {
+        "@types/htmltojsx": "0.0.29",
         "@types/mocha": "^10.0.6",
         "@types/node": "18.x",
         "@types/vscode": "^1.86.0",
         "@vscode/test-cli": "^0.0.6",
         "@vscode/test-electron": "^2.3.9",
         "eslint": "^8.56.0",
-        "typescript": "^5.3.3",
-        "@types/htmltojsx": "0.0.29"
+        "typescript": "^5.3.3"
     },
     "dependencies": {
-        "node-fetch": "^2.7.0",
+        "@lzy1960/google-translate": "^0.2.7",
+        "free-google-translator-api": "^1.0.0",
+        "google-translate-api": "^2.3.0",
+        "hoek": "^5.0.3",
         "htmltojsx": "^0.3.0",
-        "hoek": "^5.0.3"
+        "node-fetch": "^2.7.0"
     }
 }

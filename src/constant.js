@@ -223,6 +223,14 @@ const QUICK_PICK_ITEM = [
         label: "HTML to JSX",
         description: "",
     },
+    {
+        label: "Require to Import",
+        description: "",
+    },
+    {
+        label: "Import to Require",
+        description: "",
+    },
     // {
     //     label: 'UPPERCASE                                                     ',
     //     description: 'EG: Visual Studio Code   ⇒   VISUAL STUDIO CODE',
