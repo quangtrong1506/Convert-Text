@@ -3,7 +3,7 @@
     "displayName": "Convert text to variable, text translate, text formatter...",
     "publisher": "QuangTrong1506",
     "description": "Supports converting text to formats: camelCase,PascalCase, CONSTANT, underscore, UPPERCASE, lowercase...",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "icon": "./logo.png",
     "engines": {
         "vscode": "^1.86.0"
@@ -75,7 +75,9 @@
     "scripts": {
         "lint": "eslint .",
         "pretest": "npm run lint",
-        "test": "vscode-test"
+        "test": "vscode-test",
+        "package": "vsce package",
+        "publish": "vsce publish"
     },
     "repository": {
         "url": "https://github.com/quangtrong1506/text.convert"

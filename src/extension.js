@@ -31,7 +31,11 @@ const activate = (context) => {
     let selectConversionOptions = vscode.commands.registerCommand("quangtrong.vscode.text.convert", openConversionOptions);
     let selectLanguage = vscode.commands.registerCommand("quangtrong.vscode.text.translate", selectCurrentLanguage);
     let selectFormat = vscode.commands.registerCommand("quangtrong.vscode.text.format", selectFormatType);
-    let convertToJSX = vscode.commands.registerCommand("quangtrong.vscode.convertHTMLtoJSX", htmlToJSX);
+    let convertToJSX = vscode.commands.registerCommand("quangtrong.vscode.convertHTMLtoJSX", () => {
+        let text = getText();
+        let result = htmlToJSX(text);
+        setText(result);
+    });
     context.subscriptions.push(selectFeature);
     context.subscriptions.push(selectConversionOptions);
     context.subscriptions.push(selectLanguage);
